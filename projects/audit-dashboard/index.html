@@ -59,11 +59,16 @@
 /* Use the tall first-row space better */
 .grid > .card:nth-child(1) .donutWrap{
   min-height:340px;
-  gap:42px;
+  gap:24px;
 }
 .grid > .card:nth-child(1) .donut{
   width:230px;
   height:230px;
+  min-width:230px;
+  min-height:230px;
+  flex:0 0 230px;
+  aspect-ratio:1 / 1;
+  border-radius:50%;
 }
 .grid > .card:nth-child(1) .donut:after{inset:42px}
 .grid > .card:nth-child(1) .donutCenter b{font-size:34px}
@@ -434,6 +439,15 @@
 
 /* V25: Action Plan Status count-up */
 .actionAnim{font-variant-numeric:tabular-nums}
+
+/* Portfolio demo fix: prevent Finding Status donut from being compressed by flexbox */
+@media(max-width:1250px) and (min-width:721px){
+  .grid > .card:nth-child(1) .donutWrap{
+    gap:18px;
+    flex-wrap:wrap;
+  }
+}
+
 </style>
 </head>
 <body>
