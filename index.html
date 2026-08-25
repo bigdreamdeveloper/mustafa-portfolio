@@ -28,7 +28,7 @@ nav{
   padding:24px 0;
 }
 .brand{font-weight:800;letter-spacing:.02em}
-nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:14px}
+nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:14px;font-weight:600}nav a:hover{color:var(--accent)}
 .hero{
   padding:72px 0 54px;
   display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center;
@@ -37,14 +37,14 @@ nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:14px}
   display:inline-block;padding:8px 12px;border-radius:999px;
   background:var(--accent2);color:var(--accent);font-weight:700;font-size:13px;
 }
-h1{font-size:54px;line-height:1.05;margin:18px 0 20px;max-width:820px}
+h1{font-size:49px;line-height:1.08;margin:18px 0 20px;max-width:820px}
 .hero p{font-size:19px;color:var(--muted);max-width:720px}
 .cta{margin-top:28px}
 .btn{
   display:inline-block;padding:13px 18px;border-radius:10px;
   text-decoration:none;font-weight:700;margin-right:10px
 }
-.btn.primary{background:var(--accent);color:white}
+.btn.primary{background:var(--accent);color:white}.btn.primary:hover{background:#173f82;transform:translateY(-1px)}
 .btn.secondary{border:1px solid var(--line);color:var(--text);background:white}
 .hero-card{
   background:var(--card);border:1px solid var(--line);border-radius:22px;
@@ -71,6 +71,105 @@ section{padding:62px 0}
   margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
 }
 .case b{display:block;margin-bottom:4px}
+
+.featuredProject{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 14px 40px rgba(23,32,51,.07);
+  display:grid;
+  grid-template-columns:1.12fr .88fr;
+  gap:28px;
+  margin-bottom:22px;
+  overflow:hidden;
+}
+.projectPreview{
+  min-width:0;
+  border:1px solid #dce4ee;
+  border-radius:16px;
+  overflow:hidden;
+  background:#edf3f8;
+  min-height:360px;
+  position:relative;
+}
+.browserBar{
+  height:34px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:0 12px;
+  background:#fff;
+  border-bottom:1px solid #e3e7ee;
+  position:relative;
+  z-index:2;
+}
+.browserDot{width:8px;height:8px;border-radius:50%;background:#c8d1dc}
+.browserUrl{
+  margin-left:8px;
+  height:18px;
+  flex:1;
+  max-width:250px;
+  background:#f3f5f8;
+  border-radius:999px;
+}
+.liveFrame{
+  position:absolute;
+  left:0;
+  top:34px;
+  width:1500px;
+  height:900px;
+  border:0;
+  transform:scale(.385);
+  transform-origin:top left;
+  pointer-events:none;
+  background:#fff;
+}
+.previewFallback{
+  position:absolute;
+  inset:34px 0 0;
+  display:none;
+  padding:20px;
+  background:linear-gradient(135deg,#123b63,#1f5f95);
+  color:#fff;
+}
+.previewFallback .mockKpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.previewFallback .mockKpis div{background:#fff;color:#172033;border-radius:10px;padding:12px}
+.previewFallback b{display:block;font-size:20px}
+.featuredInfo{padding:16px 8px 12px}
+.featuredLabel{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 10px;border-radius:999px;
+  background:#eaf1ff;color:var(--accent);
+  font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase
+}
+.liveDot{width:7px;height:7px;border-radius:50%;background:#2e7d55;display:inline-block}
+.featuredInfo h3{font-size:30px;line-height:1.18;margin:15px 0 12px}
+.featuredInfo>p{font-size:15px;color:var(--muted);margin:0 0 20px}
+.projectPoints{display:grid;gap:10px;margin:18px 0 24px}
+.projectPoint{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;border-bottom:1px solid #edf0f4;
+  font-size:14px;color:#465164
+}
+.projectPoint:last-child{border-bottom:0}
+.tick{
+  width:22px;height:22px;border-radius:7px;
+  background:#eef4ff;color:var(--accent);font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto
+}
+.projectActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.projectActions .btn{margin:0}
+.textLink{
+  color:var(--accent);font-size:13px;font-weight:750;
+  text-decoration:none;padding:9px 2px
+}
+.demoNote{font-size:11px;color:#7b8491;margin-top:16px}
+.otherWorkTitle{
+  font-size:13px;text-transform:uppercase;letter-spacing:.1em;
+  color:#7a8491;font-weight:800;margin:30px 0 14px
+}
+
 .skills{display:flex;flex-wrap:wrap;gap:10px}
 .skill{
   background:white;border:1px solid var(--line);padding:10px 14px;border-radius:999px;
@@ -85,6 +184,11 @@ section{padding:62px 0}
 footer{padding:34px 0 50px;color:var(--muted);font-size:13px}
 @media (max-width:800px){
   .hero{grid-template-columns:1fr}
+  .featuredProject{grid-template-columns:1fr;padding:12px}
+  .projectPreview{min-height:250px}
+  .liveFrame{display:none}
+  .previewFallback{display:block}
+  .featuredInfo h3{font-size:26px}
   h1{font-size:42px}
   .grid{grid-template-columns:1fr}
   .section-title,.contact{display:block}
@@ -135,20 +239,49 @@ footer{padding:34px 0 50px;color:var(--muted);font-size:13px}
       <p>Sample projects use generic or dummy data. Client and employer information is not displayed.</p>
     </div>
 
-    <div class="grid">
-      <article class="card">
-        <span class="tag">Dashboard</span>
-        <h3>Audit Action Plan Dashboard</h3>
-        <p>Interactive view for findings, action plans, closure status, overdue items and division-level performance.</p>
-        <div class="case">
-          <b>Problem</b>
-          <p>Action plans were difficult to monitor across multiple teams.</p>
-          <b>Solution</b>
-          <p>Created a consolidated management dashboard with filters, KPIs and status tracking.</p>
+    <article class="featuredProject">
+      <div class="projectPreview" aria-label="Live preview of the Audit Action Plan Dashboard">
+        <div class="browserBar">
+          <span class="browserDot"></span><span class="browserDot"></span><span class="browserDot"></span>
+          <span class="browserUrl"></span>
         </div>
-        <div class="meta">Excel · HTML · JavaScript</div>
-      </article>
+        <iframe class="liveFrame" src="projects/audit-dashboard/" title="Audit Action Plan Dashboard live preview" loading="lazy"></iframe>
+        <div class="previewFallback">
+          <small>PORTFOLIO DEMO</small>
+          <h3 style="margin:8px 0 0">Internal Audit Management Dashboard</h3>
+          <div class="mockKpis">
+            <div><small>Findings</small><b>24</b></div>
+            <div><small>Open</small><b>7</b></div>
+            <div><small>Closure</small><b>71%</b></div>
+          </div>
+        </div>
+      </div>
 
+      <div class="featuredInfo">
+        <span class="featuredLabel"><i class="liveDot"></i> Featured · Live Demo</span>
+        <h3>Audit Action Plan Dashboard</h3>
+        <p>
+          A management dashboard designed to turn audit findings and action-plan data
+          into a clear, interactive view for monitoring closure, ownership and overdue items.
+        </p>
+
+        <div class="projectPoints">
+          <div class="projectPoint"><span class="tick">✓</span><span>Interactive filters for division and finding status</span></div>
+          <div class="projectPoint"><span class="tick">✓</span><span>KPI monitoring, ageing analysis and action-plan tracking</span></div>
+          <div class="projectPoint"><span class="tick">✓</span><span>Detailed drill-down views with Excel export functionality</span></div>
+        </div>
+
+        <div class="projectActions">
+          <a class="btn primary" href="projects/audit-dashboard/" target="_blank" rel="noopener">View Live Demo ↗</a>
+          <a class="textLink" href="projects/audit-dashboard/" target="_blank" rel="noopener">Open full dashboard</a>
+        </div>
+        <div class="demoNote">Portfolio demonstration using a fictional company and dummy data.</div>
+        <div class="meta">Excel · HTML · JavaScript · Data Visualization</div>
+      </div>
+    </article>
+
+    <div class="otherWorkTitle">More selected work</div>
+    <div class="grid">
       <article class="card">
         <span class="tag">Analytics</span>
         <h3>Training & Quiz Performance Dashboard</h3>
