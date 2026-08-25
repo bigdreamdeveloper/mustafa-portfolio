@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AEROVANTA INDUSTRIES Internal Audit Dashboard — Portfolio Demo</title>
+<style>
+:root{
+--navy:#16324F;
+--navy2:#245B78;
+--ink:#172B3D;
+--muted:#66788A;
+--line:#D9E3EC;
+--bg:#F3F7FA;
+--card:#FFFFFF;
+--teal:#2D8C8C;
+--teal2:#E8F5F4;
+--amber:#A97824;
+--amber2:#FFF5DF;
+--red:#C73A3A;
+--red2:#FBEAEA;
+--green:#2E7D55;
+--green2:#E5F3EB;
+--shadow:0 6px 20px rgba(18,59,99,.09)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Segoe UI,Inter,Arial,sans-serif;color:var(--ink)}
+.shell{max-width:1500px;margin:0 auto;padding:24px}.top{background:linear-gradient(120deg,#16324F,#245B78);color:#fff;border-radius:18px;padding:24px 28px 22px;box-shadow:var(--shadow)}
+.toprow{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.72;font-weight:700}.top h1{font-size:28px;margin:7px 0 6px;line-height:1.1}.subtitle{font-size:13px;opacity:.78}.actionsTop{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:9px 12px;font-weight:650;cursor:pointer}.btn:hover{background:rgba(255,255,255,.15)}
+.btn.primary{background:#fff;color:var(--navy);border-color:#fff}.btn.primary:hover{background:#eef5fb}.fileInput{display:none}.sourceNote{font-size:11px;opacity:.72;margin-top:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}.sourceDot{width:7px;height:7px;border-radius:50%;background:#55D3C7;display:inline-block}.sourceFile{font-weight:700;color:#fff}.uploadMsg{font-size:11px;opacity:.78}.uploadMsg.error{color:#ffd0d0;opacity:1}
+.filters{display:grid;grid-template-columns:minmax(220px,1.4fr) repeat(2,minmax(170px,1fr)) auto;gap:12px;margin-top:20px;align-items:end}.filterBox label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;opacity:.68;margin:0 0 6px}.filterBox select{width:100%;border:1px solid rgba(255,255,255,.22);background:#fff;color:var(--navy);border-radius:10px;padding:11px 12px;font-weight:650;outline:none}.filterNote{font-size:12px;opacity:.72;padding-bottom:10px;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:12px;margin:16px 0}.kpi{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px 17px 16px 21px;box-shadow:var(--shadow);min-height:112px;position:relative;overflow:hidden}.kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:13px;background:var(--navy2)}.kpi.teal:before{background:#55D3C7}.kpi.green:before{background:#8b8d91}.kpi.amber:before{background:var(--amber)}.kpi.red:before{background:var(--red)}.kpiLabel{font-size:11px;color:var(--muted);font-weight:750;letter-spacing:.08em;text-transform:uppercase}.kpiValue{font-size:30px;font-weight:800;color:var(--navy);margin:9px 0 2px}.kpiSub{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}.card h2{font-size:14px;margin:0;color:var(--navy);letter-spacing:.04em}.cardHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.badge{font-size:11px;font-weight:700;border-radius:999px;padding:5px 9px;background:#eef3f8;color:#526174}
+.donutWrap{display:flex;align-items:center;justify-content:center;gap:34px;min-height:250px;cursor:pointer;border-radius:12px}.donutWrap:hover{background:#fafafa}.donut{width:190px;height:190px;border-radius:50%;position:relative;background:conic-gradient(var(--teal) 0deg,var(--teal) var(--angle),#e9eef3 var(--angle) 360deg)}.donut:after{content:"";position:absolute;inset:34px;background:white;border-radius:50%}.donutCenter{position:absolute;z-index:2;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}.donutCenter b{font-size:28px;color:var(--navy)}.donutCenter span{font-size:11px;color:var(--muted)}.legend{display:grid;gap:10px}.legendRow{display:flex;align-items:center;gap:8px;font-size:12px}.dot{width:9px;height:9px;border-radius:50%}.legendRow strong{margin-left:auto;color:var(--navy)}
+.barChart{display:grid;gap:11px}.barRow{display:grid;grid-template-columns:115px 1fr 28px;align-items:center;gap:10px}.barLabel{font-size:11px;color:#4e5b6b;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track{height:11px;background:#edf1f5;border-radius:999px;overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#16324F,#2D8C8C)}.barVal{font-weight:750;font-size:12px;color:var(--navy);text-align:right}
+.actionSummary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.actionMini{border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#f8fafc}.actionMini span{display:block;font-size:10px;color:var(--muted);font-weight:750;letter-spacing:.06em;text-transform:uppercase}.actionMini b{display:block;font-size:24px;color:var(--navy);margin-top:4px}.statusStack{display:grid;gap:12px}.statusTile{padding:12px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:space-between}.statusTile .meta{display:flex;align-items:center;gap:10px}.statusIcon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800}.statusIcon.good{background:#e8e8e8;color:#55585c}.statusIcon.wait{background:#E8F5F4;color:#2D8C8C}.statusIcon.bad{background:var(--red2);color:var(--red)}.statusTile small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.statusTile b{font-size:22px;color:var(--navy)}
+.wide{grid-column:1/-1}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--line);background:#fff;color:#5a6777;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:980px;background:#fff}th{background:#f6f8fb;color:#667385;font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:11px;border-bottom:1px solid var(--line);position:sticky;top:0}td{padding:11px;border-bottom:1px solid #edf0f3;font-size:12px;vertical-align:top}tr:last-child td{border-bottom:0}tr.clickable{cursor:pointer}tr.clickable:hover{background:#f8fbfd}.num{font-weight:800;color:var(--navy)}.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750;white-space:nowrap}.pill.completed{background:#e4f4eb;color:#2f7d57}.pill.ongoing{background:#E8F5F4;color:#2D8C8C}.pill.overdue{background:var(--red2);color:var(--red)}.pill.pending{background:var(--amber2);color:var(--amber)}.joint{font-size:9px;background:#ece8ff;color:#5f4aa2;padding:3px 6px;border-radius:6px;margin-left:5px;font-weight:750}.empty{text-align:center;color:var(--muted);padding:30px}
+.footer{display:flex;justify-content:space-between;gap:20px;color:#7c8795;font-size:11px;padding:12px 4px 2px}.modal{display:none;position:fixed;inset:0;background:rgba(9,24,40,.58);z-index:20;padding:24px}.modal.show{display:flex;align-items:center;justify-content:center}.modalCard{width:min(760px,100%);max-height:88vh;overflow:auto;background:white;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.25)}.modalTop{display:flex;justify-content:space-between;gap:16px}.close{border:0;background:#eef2f5;border-radius:9px;width:34px;height:34px;font-size:18px;cursor:pointer}.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.detail{border:1px solid var(--line);border-radius:11px;padding:11px}.detail label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:5px}.detail div{font-size:12px;line-height:1.45}.detail.full{grid-column:1/-1}.actionList{display:grid;gap:9px;margin-top:8px}.actionItem{border-left:3px solid var(--teal);background:#f7fafb;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.45}.actionMeta{color:var(--muted);font-size:11px;margin-top:6px}.brandBlock{display:flex;align-items:center;gap:18px}.brandLogo{width:190px;height:96px;object-fit:contain;object-position:center}.brandText{min-width:0}.interactiveCard{cursor:default}.clickableMetric{cursor:pointer;border-radius:9px;padding:3px 5px;margin-left:-5px;margin-right:-5px;transition:background .15s ease,transform .15s ease}.clickableMetric:hover{background:#f3f8fa;transform:translateX(2px)}.prototypeTag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750;margin-top:8px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr 1fr}.grid .card:last-child{grid-column:1/-1}.filters{grid-template-columns:1fr 1fr 1fr}.filterNote{grid-column:1/-1}.toprow{flex-direction:column}.brandBlock{align-items:flex-start}.brandLogo{width:175px;height:90px}.actionsTop{justify-content:flex-start}}
+@media(max-width:720px){.shell{padding:10px}.kpis{grid-template-columns:1fr 1fr}.brandBlock{gap:12px}.brandLogo{width:150px;height:76px}.grid{grid-template-columns:1fr}.grid .card:last-child{grid-column:auto}.filters{grid-template-columns:1fr}.detailGrid{grid-template-columns:1fr}.detail.full{grid-column:auto}.donutWrap{flex-direction:column}.footer{flex-direction:column}}
+@media print{body{background:#fff}.shell{max-width:none;padding:0}.btn,.filters,.tabs{display:none!important}.top{border-radius:0;box-shadow:none}.card,.kpi{box-shadow:none;break-inside:avoid}.modal{display:none!important}}
+
+/* ---------- v2 management layer ---------- */
+.miniGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ageRow{display:grid;grid-template-columns:78px 1fr 30px;gap:9px;align-items:center;margin:10px 0}.ageLabel{font-size:11px;color:#536174;font-weight:700}.ageFill{height:10px;background:#edf1f5;border-radius:999px;overflow:hidden}.ageFill>i{display:block;height:100%;background:linear-gradient(90deg,#16324F,#2D8C8C);border-radius:999px}.ageVal{text-align:right;font-weight:800;font-size:11px}.picRow{display:grid;grid-template-columns:105px 1fr 28px;gap:9px;align-items:center;margin:10px 0}.picLabel{font-size:11px;color:#536174;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kpi.alert:before{background:var(--red)}.kpi.totalFinding:before{background:#111}.kpi.totalFinding .kpiValue{color:#111}.kpi.alert .kpiValue{color:var(--red)}.upcoming{background:var(--amber2);color:var(--amber)}
+@media(max-width:1100px){.miniGrid{grid-template-columns:1fr}}
+/* LOGO COLOR LOCK */
+.logo img,.brand-logo img,.brandLogo{
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+
+/* V4 layout refinement */
+.kpi.teal:before{background:#55D3C7}
+.kpi.green:before{background:#2f7d57}
+.kpi.green .kpiValue{color:#2f7d57}
+.kpi:not(.teal):not(.green):before{background:#111111}
+
+/* Use the tall first-row space better */
+.grid > .card:nth-child(1) .donutWrap{
+  min-height:340px;
+  gap:42px;
+}
+.grid > .card:nth-child(1) .donut{
+  width:230px;
+  height:230px;
+}
+.grid > .card:nth-child(1) .donut:after{inset:42px}
+.grid > .card:nth-child(1) .donutCenter b{font-size:34px}
+.grid > .card:nth-child(1) .legend{min-width:105px}
+.grid > .card:nth-child(2) .barChart{
+  min-height:340px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:18px;
+}
+.grid > .card:nth-child(2) .barRow{
+  grid-template-columns:140px 1fr 32px;
+  gap:12px;
+}
+.grid > .card:nth-child(2) .track{height:13px}
+.grid > .card:nth-child(2) .barLabel{font-size:12px}
+.grid > .card:nth-child(2) .barVal{font-size:13px}
+.grid > .card:nth-child(3) .statusStack{
+  min-height:340px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.grid > .card:nth-child(3) .actionSummary{margin-bottom:16px}
+
+/* Make the second-row cards larger and center their content */
+.grid > .interactiveCard{
+  min-height:330px;
+}
+.grid > .interactiveCard #ageingChart,
+.grid > .interactiveCard #picChart{
+  min-height:245px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.grid > .interactiveCard .ageRow,
+.grid > .interactiveCard .picRow{
+  margin:12px 0;
+}
+.grid > .interactiveCard .ageFill{
+  height:12px;
+}
+.grid > .interactiveCard .ageLabel,
+.grid > .interactiveCard .picLabel{
+  font-size:12px;
+}
+.grid > .interactiveCard .ageVal{
+  font-size:13px;
+}
+
+/* Closed = green, Open = red in action-plan status */
+.statusIcon.good{
+  background:#e4f4eb!important;
+  color:#2f7d57!important;
+}
+.statusIcon.wait{
+  background:#fde8e8!important;
+  color:#55D3C7!important;
+}
+
+/* Finding-status legend: Closed green */
+#findingLegend .legendRow:first-child .dot{
+  background:#2f7d57!important;
+}
+#findingLegend .legendRow:first-child strong{
+  color:#2f7d57!important;
+}
+
+/* Action-plan summary: center the numbers; closure rate green */
+.actionMini{
+  text-align:center;
+  padding:16px 12px;
+}
+.actionMini b{
+  margin-top:7px;
+  font-size:28px;
+}
+.actionMini:nth-child(2) b{
+  color:#2f7d57;
+}
+
+/* Keep totals/values visually centered where requested */
+.actionMini span{display:block;text-align:center}
+
+/* Slightly stronger visual separation for clickable cards */
+.grid > .card:nth-child(1) .donutWrap,
+.grid > .interactiveCard #ageingChart,
+.grid > .interactiveCard #picChart{
+  border-radius:12px;
+}
+
+
+/* V5 BLUE THEME */
+.kpi.closureGreen:before{background:#2E7D55!important}
+#kClosure{color:#111111!important}
+.statusIcon.good{background:#E5F3EB!important;color:#2E7D55!important}
+.legendRow .dot.closedDot{background:#2E7D55!important}
+
+/* V6 KPI refinement */
+.kpi:nth-child(1):before{background:#16324F!important}
+.kpi:nth-child(2):before{background:#245B78!important}
+.kpi:nth-child(3):before{background:#2D8C8C!important}
+.kpi:nth-child(4):before{background:#2E7D55!important}
+.kpi:nth-child(5):before{background:#63A77C!important}
+.kpiValue,#kTotal,#kOpen,#kCompleted,#kClosure{color:#111111!important}
+#kClosure{color:#111111!important}
+.actionMini b{color:#111111!important}
+
+/* V7 Finding Status */
+.donut{
+  background:conic-gradient(#2E7D55 0deg,#2E7D55 var(--angle),#E1E9F0 var(--angle) 360deg)!important;
+}
+
+/* V8: utilise full width for Action Plan analysis row */
+.actionAnalysisRow{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.actionAnalysisRow > .card{
+  min-width:0;
+}
+@media(max-width:720px){
+  .actionAnalysisRow{grid-template-columns:1fr}
+}
+
+.lastUpdated{
+  font-weight:700;
+  margin-left:10px;
+  color:rgba(255,255,255,.88);
+}
+@media(max-width:720px){
+  .lastUpdated{margin-left:0}
+}
+
+/* V10 header cleanup */
+.toprow{position:relative}
+.lastUpdated{
+  margin-left:auto!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  color:rgba(255,255,255,.82)!important;
+  white-space:nowrap;
+}
+.sourceNote{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+@media(max-width:720px){
+  .lastUpdated{
+    margin-left:0!important;
+    width:100%;
+    margin-top:3px!important;
+  }
+}
+
+.lastUpdatedWrap{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+@media(max-width:1100px){
+  .lastUpdatedWrap{margin-left:0;justify-content:flex-start}
+}
+
+
+/* V12: clean header action alignment */
+.actionsTop{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-end!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  min-width:390px;
+}
+.uploadStack{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+.secondaryActions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+}
+.lastUpdatedBelow{
+  width:auto!important;
+  text-align:right!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+  color:rgba(255,255,255,.82)!important;
+  margin:0!important;
+  white-space:nowrap;
+}
+@media(max-width:1100px){
+  .actionsTop{
+    min-width:0;
+    width:100%;
+    align-items:flex-start!important;
+  }
+  .uploadStack{align-items:flex-start}
+  .secondaryActions{justify-content:flex-start}
+  .lastUpdatedBelow{text-align:left!important}
+}
+
+/* V13: align secondary actions with upload button */
+.secondaryActions{
+  width:100%;
+  display:flex!important;
+  align-items:center;
+  justify-content:flex-end!important;
+  gap:8px;
+}
+.secondaryActions .btn{
+  margin:0!important;
+}
+
+/* V14: header buttons in one horizontal row */
+.actionsTop{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:flex-start!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+.uploadStack{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+.secondaryActions{
+  width:auto!important;
+  display:flex!important;
+  align-items:flex-start;
+  justify-content:flex-end!important;
+  gap:8px;
+}
+.secondaryActions .btn{
+  margin:0!important;
+}
+.lastUpdatedBelow{
+  width:auto!important;
+  text-align:right!important;
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+  color:rgba(255,255,255,.82)!important;
+  margin:0!important;
+  white-space:nowrap;
+}
+@media(max-width:900px){
+  .actionsTop{
+    flex-wrap:wrap;
+    justify-content:flex-start!important;
+  }
+}
+
+/* V15 status color refinement */
+.kpi:nth-child(3):before{background:#2D8C8C!important}
+.kpi:nth-child(3) .kpiValue{color:#111111!important}
+.statusIcon.wait{
+  background:#E8F5F4!important;
+  color:#2D8C8C!important;
+}
+.statusPill.open{background:#E8F5F4!important;color:#2D8C8C!important;border-color:#BFDCD9!important;box-shadow:none!important}
+.pill.open,.badge.open{background:#E8F5F4!important;color:#2D8C8C!important;border-color:#BFDCD9!important;box-shadow:none!important}
+
+/* V16: table Open status blue */
+.statusPill.open,
+.pill.open,
+.badge.open{
+  background:#E8F5F4!important;
+  color:#2D8C8C!important;
+  border-color:#BFDCD9!important;
+}
+.statusIcon.wait{
+  background:#E8F5F4!important;
+  color:#2D8C8C!important;
+}
+
+/* V17: force every table Open status to blue */
+.statusPill.open,
+.statusPill.open *,
+.pill.open,
+.pill.open *,
+.badge.open,
+.badge.open *{
+  background:#E8F5F4!important;
+  color:#2D8C8C!important;
+  border-color:#BFDCD9!important;
+  box-shadow:none!important;
+}
+
+/* V18: actual Open/Ongoing table pill is .pill.ongoing */
+.pill.ongoing{
+  background:#E8F5F4!important;
+  color:#2D8C8C!important;
+  border-color:#BFDCD9!important;
+}
+
+/* V19: Finding Status donut uses blue theme */
+.donut{
+  background:conic-gradient(#2D8C8C 0deg,#2D8C8C var(--angle),#E1E9F0 var(--angle) 360deg)!important;
+}
+
+/* V20: Finding Status colors */
+.donut{
+  background:conic-gradient(#2E7D55 0deg,#2E7D55 var(--angle),#E1E9F0 var(--angle) 360deg)!important;
+}
+
+/* V21: Excel export controls */
+.detailTools{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.exportBtn{
+  border:1px solid #BFDCD9;
+  background:#F5F9FC;
+  color:#16324F;
+  border-radius:9px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:750;
+  cursor:pointer;
+}
+.exportBtn:hover{background:#E8F5F4;border-color:#8ACBC6}
+@media(max-width:720px){
+  .detailTools{justify-content:flex-start}
+}
+
+/* V22: Findings by Division popup */
+.divisionClickable{cursor:pointer}
+.divisionClickable:hover .barLabel,
+.divisionClickable:hover .barVal{color:#2D8C8C}
+.divisionClickable:hover .fill{filter:brightness(1.08)}
+
+/* V23: KPI typography + clickable Action Plan status tiles */
+.kpiLabel{font-size:13px!important;letter-spacing:.08em}
+.kpiValue{font-size:34px!important}
+.statusTile.interactiveStatus{cursor:pointer}
+.statusTile.interactiveStatus:hover{border-color:#8ACBC6;box-shadow:0 4px 12px rgba(18,59,99,.10)}
+
+/* V24: smooth metric count-up + Finding Status sweep */
+@property --angle{
+  syntax:'<angle>';
+  inherits:false;
+  initial-value:0deg;
+}
+#donut{
+  --angle:0deg;
+  transition:--angle 1.1s cubic-bezier(.22,.61,.36,1);
+}
+.countAnimate{font-variant-numeric:tabular-nums}
+
+/* V25: Action Plan Status count-up */
+.actionAnim{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="shell">
+  <section class="top">
+    <div class="toprow">
+      <div class="brandBlock">
+        <img class="brandLogo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgMTcwIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICA8cGF0aCBkPSJNMjggMTI2TDg4IDI0bDYwIDEwMmgtMzFMODggNzcgNTkgMTI2SDI4eiIgZmlsbD0iIzU1RDNDNyIvPgogIDxwYXRoIGQ9Ik03NSAxMDNoNjhsMTYgMjdINTl6IiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIuOTUiLz4KICA8cGF0aCBkPSJNOTMgNThsMjIgMzdINzF6IiBmaWxsPSIjMTYzMjRGIiBvcGFjaXR5PSIuOSIvPgogIDx0ZXh0IHg9IjE4MCIgeT0iODIiIGZpbGw9IiNGRkZGRkYiIGZvbnQtZmFtaWx5PSJTZWdvZSBVSSxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iODAwIiBsZXR0ZXItc3BhY2luZz0iMiI+QUVST1ZBTlRBPC90ZXh0PgogIDx0ZXh0IHg9IjE4MyIgeT0iMTE5IiBmaWxsPSIjQkZFREU4IiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjciPklORFVTVFJJRVM8L3RleHQ+CjwvZz48L3N2Zz4=" alt="AeroVanta Industries" />
+        <div class="brandText">
+          <div class="eyebrow">AEROVANTA INDUSTRIES · Internal Audit</div>
+          <h1>Internal Audit Management Dashboard</h1><div class="prototypeTag">Portfolio Demo · Fictional Company & Data</div>
+        <div class="sourceNote"><span class="sourceDot"></span><span>Demo data source:</span><span class="sourceFile" id="sourceFile">AeroVanta_Audit_Demo_Data.xlsx</span><span class="uploadMsg" id="uploadMsg"></span></div></div></div><div class="actionsTop">
+        <input class="fileInput" id="excelFileInput" type="file" accept=".xlsx,.xlsm" />
+        <div class="uploadStack">
+          <button class="btn primary" onclick="document.getElementById('excelFileInput').click()">Upload / Update Excel</button>
+          <div class="lastUpdatedBelow" id="lastUpdated">Last updated: —</div>
+        </div>
+        <div class="secondaryActions">
+          <button class="btn" onclick="resetFilters()">Reset filters</button>
+          <button class="btn" onclick="window.print()">Print / Save PDF</button>
+        </div>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="filterBox"><label>Division</label><select id="divisionFilter"></select></div>
+      <div class="filterBox"><label>Finding status</label><select id="statusFilter"><option value="ALL">All status</option><option value="Ongoing">Open</option><option value="Completed">Closed</option></select></div>
+      <div class="filterBox"><label>Action status</label><select id="actionFilter"><option value="ALL">All action plans</option><option value="Ongoing">Open</option><option value="Completed">Closed</option></select></div>
+      <div class="filterNote" id="scopeNote"></div>
+    </div>
+  </section>
+
+  <section class="kpis">
+    <div class="kpi"><div class="kpiLabel">Total Division</div><div class="kpiValue" id="kDivisions">0</div><div class="kpiSub" id="kDivisionsSub"></div></div>
+    <div class="kpi"><div class="kpiLabel">Total Finding</div><div class="kpiValue" id="kTotal">0</div><div class="kpiSub" id="kTotalSub"></div></div>
+    <div class="kpi teal"><div class="kpiLabel">Open</div><div class="kpiValue" id="kOpen">0</div><div class="kpiSub">Findings requiring closure</div></div>
+    <div class="kpi green"><div class="kpiLabel">Closed</div><div class="kpiValue" id="kCompleted">0</div><div class="kpiSub">Closed findings</div></div>
+    <div class="kpi closureGreen teal"><div class="kpiLabel">Closure Rate</div><div class="kpiValue" id="kClosure">0%</div><div class="kpiSub">Closed ÷ total findings</div></div>
+  </section>
+
+  <section class="grid">
+    <article class="card"><div class="cardHead"><h2>FINDING STATUS</h2><span class="badge" id="findingBadge">Click for details</span></div><div class="donutWrap" onclick="openFindingStatus()" title="Click to view finding status details"><div class="donut" id="donut"><div class="donutCenter"><b id="donutPct">0%</b><span>closure</span></div></div><div class="legend" id="findingLegend"></div></div></article>
+    <article class="card"><div class="cardHead"><h2>FINDINGS BY DIVISION</h2><span class="badge">Current filter scope</span></div><div class="barChart" id="divisionBars"></div></article>
+    <article class="card"><div class="cardHead"><h2>ACTION PLAN STATUS</h2><span class="badge" id="actionBadge"></span></div><div class="statusStack" id="actionStack"></div></article>
+
+    <div class="actionAnalysisRow"><article class="card interactiveCard"><div class="cardHead"><h2>ACTION PLAN AGEING</h2><span class="badge">Click a band for details</span></div><div id="ageingChart"></div></article><article class="card interactiveCard"><div class="cardHead"><h2>ACTION PLAN OPEN BY PIC</h2><span class="badge">Click a PIC for details</span></div><div id="picChart"></div></article></div>
+
+    <article class="card wide">
+      <div class="cardHead"><h2>AUDIT DETAIL</h2><div class="detailTools"><div class="tabs"><button class="tab active" data-tab="findings" onclick="setTab('findings')">Findings</button><button class="tab" data-tab="actions" onclick="setTab('actions')">Action Plans</button></div><button class="exportBtn" onclick="exportFindingsXlsx()">Export Findings</button><button class="exportBtn" onclick="exportActionsXlsx()">Export Action Plans</button></div></div>
+      <div id="tableHost"></div>
+    </article>
+  </section>
+  <div class="footer"><span>Portfolio demonstration · All names, company details and records shown are fictional. Upload an Excel workbook locally to test the dashboard.</span><span>Demo-ready · Required sheets: <strong>FINDINGS</strong> and <strong>ACTION PLANS</strong>.</span></div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this) closeModal()"><div class="modalCard"><div class="modalTop"><div><div class="eyebrow" id="modalEyebrow" style="color:#737373">Finding detail</div><h2 id="modalTitle" style="margin:6px 0 0;color:#111111"></h2></div><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+
+<script>
+const INITIAL_DATA={"findings":[{"no":1,"division":"SALES & MARKETING","summary":"Selected customer discount approvals were not retained with the final commercial proposal","status":"Completed","pic":"Lina Faris","managementFlag":"Closed","due":"Closed"},{"no":2,"division":"SALES & MARKETING","summary":"CRM opportunity records were closed without documenting the final outcome reason","status":"Ongoing","pic":"Lina Faris","managementFlag":"Priority follow-up","due":"15 Aug 2026"},{"no":3,"division":"SALES & MARKETING","summary":"Customer master data amendments did not consistently show evidence of independent review","status":"Ongoing","pic":"Marcus Teo","managementFlag":"In progress","due":"15 Sep 2026"},{"no":4,"division":"ENGINEERING","summary":"Acknowledgement of revised technical drawings was not consistently retained for sampled work packages","status":"Completed","pic":"Priya Nair","managementFlag":"Closed","due":"Closed"},{"no":5,"division":"ENGINEERING","summary":"Engineering change implementation logs were not updated promptly after production release","status":"Ongoing","pic":"Priya Nair","managementFlag":"In progress","due":"30 Sep 2026"},{"no":6,"division":"ENGINEERING","summary":"An obsolete work instruction copy was available at a sampled workstation","status":"Ongoing","pic":"Adam Ismail","managementFlag":"Monitoring","due":"31 Oct 2026"},{"no":7,"division":"PRODUCTION","summary":"Shift output variances above the internal threshold were not consistently supported by written explanations","status":"Completed","pic":"Adam Ismail","managementFlag":"Closed","due":"Closed"},{"no":8,"division":"PRODUCTION","summary":"Machine start-up checklists had incomplete operator verification for selected shifts","status":"Ongoing","pic":"Cheryl Ong","managementFlag":"Priority follow-up","due":"10 Sep 2026"},{"no":9,"division":"PRODUCTION","summary":"Rework labour hours were not consistently linked to the related production order","status":"Ongoing","pic":"Cheryl Ong","managementFlag":"In progress","due":"30 Nov 2026"},{"no":10,"division":"WAREHOUSE","summary":"Cycle count variance investigations were not completed within the internal turnaround target","status":"Ongoing","pic":"Rafiq Azman","managementFlag":"Priority follow-up","due":"20 Aug 2026"},{"no":11,"division":"WAREHOUSE","summary":"Bin location changes were not updated in the inventory location register on the same day","status":"Completed","pic":"Rafiq Azman","managementFlag":"Closed","due":"Closed"},{"no":12,"division":"WAREHOUSE","summary":"Selected material issue transactions were posted after the related physical movement","status":"Ongoing","pic":"Mei Wong","managementFlag":"Monitoring","due":"31 Dec 2026"},{"no":13,"division":"FACILITIES","summary":"Preventive maintenance evidence for selected building services was incomplete in the maintenance file","status":"Completed","pic":"Mei Wong","managementFlag":"Closed","due":"Closed"},{"no":14,"division":"FACILITIES","summary":"Visitor badge return records were incomplete for selected after-hours visits","status":"Ongoing","pic":"Hakim Noor","managementFlag":"Priority follow-up","due":"05 Sep 2026"},{"no":15,"division":"HUMAN CAPITAL","summary":"Probation review forms were completed after the required review date for selected employees","status":"Ongoing","pic":"Aisha Karim","managementFlag":"In progress","due":"31 Oct 2026"},{"no":16,"division":"HUMAN CAPITAL","summary":"Supporting documents were not attached to selected manual leave balance adjustments","status":"Completed","pic":"Aisha Karim","managementFlag":"Closed","due":"Closed"},{"no":17,"division":"FINANCE","summary":"Evidence of reviewer approval was missing for selected manual journal entries","status":"Ongoing","pic":"Leon Goh","managementFlag":"In progress","due":"25 Sep 2026"},{"no":18,"division":"FINANCE / SALES & MARKETING","summary":"Monthly reconciliation between approved customer rebates and rebate accruals was not consistently performed","status":"Ongoing","pic":"Leon Goh","managementFlag":"Monitoring","due":"15 Dec 2026"}],"actions":[{"id":"A01","findingNo":1,"division":"SALES & MARKETING","action":"Add the approved discount reference to the commercial proposal checklist and archive the approval with the final proposal.","pic":"Lina Faris","due":"Closed","status":"Completed","health":"Completed"},{"id":"A02","findingNo":1,"division":"SALES & MARKETING","action":"Perform a sample review of recently approved discounts to confirm the revised control is operating as intended.","pic":"Marcus Teo","due":"Closed","status":"Completed","health":"Completed"},{"id":"A03","findingNo":2,"division":"SALES & MARKETING","action":"Make opportunity closure reason a mandatory field in the CRM workflow.","pic":"Lina Faris","due":"12 Aug 2026","status":"Ongoing","health":"Overdue"},{"id":"A04","findingNo":2,"division":"SALES & MARKETING","action":"Review recently closed opportunities and update missing closure reasons where supporting information is available.","pic":"Marcus Teo","due":"30 Aug 2026","status":"Ongoing","health":"Due soon"},{"id":"A05","findingNo":3,"division":"SALES & MARKETING","action":"Introduce maker-checker approval for customer master data amendments.","pic":"Marcus Teo","due":"15 Sep 2026","status":"Ongoing","health":"Due soon"},{"id":"A06","findingNo":4,"division":"ENGINEERING","action":"Implement a digital acknowledgement log for revised technical drawings released to users.","pic":"Priya Nair","due":"Closed","status":"Completed","health":"Completed"},{"id":"A07","findingNo":5,"division":"ENGINEERING","action":"Assign weekly ownership for reconciling approved engineering changes against the implementation log.","pic":"Priya Nair","due":"30 Sep 2026","status":"Ongoing","health":"Not yet due"},{"id":"A08","findingNo":6,"division":"ENGINEERING","action":"Remove obsolete controlled copies and introduce a monthly workstation document verification check.","pic":"Adam Ismail","due":"31 Oct 2026","status":"Ongoing","health":"Not yet due"},{"id":"A09","findingNo":7,"division":"PRODUCTION","action":"Update the shift report template to require explanation for output variances above the approved threshold.","pic":"Adam Ismail","due":"Closed","status":"Completed","health":"Completed"},{"id":"A10","findingNo":8,"division":"PRODUCTION","action":"Brief operators on start-up checklist completion and add supervisor verification at the end of each shift.","pic":"Cheryl Ong","due":"10 Sep 2026","status":"Ongoing","health":"Due soon"},{"id":"A11","findingNo":9,"division":"PRODUCTION","action":"Add production order reference as a mandatory field when recording rework labour hours.","pic":"Cheryl Ong","due":"30 Nov 2026","status":"Ongoing","health":"Not yet due"},{"id":"A12","findingNo":10,"division":"WAREHOUSE","action":"Clear outstanding cycle count investigations and establish a weekly exception review for unresolved variances.","pic":"Rafiq Azman","due":"20 Aug 2026","status":"Ongoing","health":"Overdue"},{"id":"A13","findingNo":10,"division":"WAREHOUSE","action":"Introduce escalation to the warehouse manager when variance investigations exceed the turnaround target.","pic":"Mei Wong","due":"05 Sep 2026","status":"Ongoing","health":"Due soon"},{"id":"A14","findingNo":11,"division":"WAREHOUSE","action":"Require location register updates before completion of bin relocation requests.","pic":"Rafiq Azman","due":"Closed","status":"Completed","health":"Completed"},{"id":"A15","findingNo":12,"division":"WAREHOUSE","action":"Introduce same-day posting checks for material issues and review open transactions before shift close.","pic":"Mei Wong","due":"31 Dec 2026","status":"Ongoing","health":"Not yet due"},{"id":"A16","findingNo":13,"division":"FACILITIES","action":"Standardise preventive maintenance evidence requirements and centralise completed service records.","pic":"Mei Wong","due":"Closed","status":"Completed","health":"Completed"},{"id":"A17","findingNo":14,"division":"FACILITIES","action":"Add badge return confirmation to the after-hours visitor exit process.","pic":"Hakim Noor","due":"05 Sep 2026","status":"Ongoing","health":"Due soon"},{"id":"A18","findingNo":15,"division":"HUMAN CAPITAL","action":"Set automated reminders 14 days before each employee probation review due date.","pic":"Aisha Karim","due":"31 Oct 2026","status":"Ongoing","health":"Not yet due"},{"id":"A19","findingNo":16,"division":"HUMAN CAPITAL","action":"Require supporting evidence attachment before manual leave adjustment requests can be approved.","pic":"Aisha Karim","due":"Closed","status":"Completed","health":"Completed"},{"id":"A20","findingNo":17,"division":"FINANCE","action":"Introduce a journal review cover sheet that records preparer and reviewer approval before posting.","pic":"Leon Goh","due":"25 Sep 2026","status":"Ongoing","health":"Not yet due"},{"id":"A21","findingNo":18,"division":"FINANCE / SALES & MARKETING","action":"Create a monthly rebate reconciliation template jointly owned by Finance and Sales & Marketing.","pic":"Leon Goh","due":"15 Dec 2026","status":"Ongoing","health":"Not yet due"},{"id":"A22","findingNo":18,"division":"FINANCE / SALES & MARKETING","action":"Review the previous quarter's rebate accruals and document any reconciling adjustments.","pic":"Lina Faris","due":"31 Oct 2026","status":"Ongoing","health":"Not yet due"}]};
+let DATA=JSON.parse(JSON.stringify(INITIAL_DATA));
+let state={division:'ALL',findingStatus:'ALL',actionStatus:'ALL',tab:'findings'};
+
+
+function formatLastUpdated(d=new Date()){
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+    + ' ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+function setLastUpdated(d=new Date()){
+  const el=document.getElementById('lastUpdated');
+  if(el) el.textContent='Last updated: '+formatLastUpdated(d);
+}
+
+function cleanText(v){return v==null?'':String(v).trim()}
+function normalizeStatus(v){
+ const s=cleanText(v).toLowerCase();
+ if(!s)return '';
+ if(s.includes('complete')||s==='closed'||s.includes('close'))return 'Completed';
+ if(s.includes('ongoing')||s.includes('open')||s.includes('progress'))return 'Ongoing';
+ return cleanText(v);
+}
+function normalizeDivision(v){return cleanText(v).toUpperCase().replace(/\s*\/\s*/g,' / ').replace(/\s+/g,' ')}
+function divisionTokens(x){return normalizeDivision(x).split('/').map(s=>s.trim()).filter(Boolean)}
+function matchesDivision(x,selected){if(selected==='ALL')return true;return divisionTokens(x).includes(selected)}
+function getBaseDivisions(){
+ const set=new Set();
+ [...DATA.findings,...DATA.actions].forEach(x=>divisionTokens(x.division).forEach(d=>set.add(d)));
+ return [...set].sort((a,b)=>a.localeCompare(b));
+}
+function getDivisionCategories(){
+ const set=new Set(DATA.findings.map(f=>normalizeDivision(f.division)).filter(Boolean));
+ return [...set].sort((a,b)=>a.localeCompare(b));
+}
+function rebuildDivisionFilter(){
+ const select=document.getElementById('divisionFilter');
+ const prev=state.division;
+ const divisions=getBaseDivisions();
+ select.innerHTML='<option value="ALL">All Division</option>'+divisions.map(x=>`<option value="${escAttr(x)}">${esc(x)}</option>`).join('');
+ if(prev!=='ALL'&&divisions.includes(prev))select.value=prev;else{state.division='ALL';select.value='ALL'}
+}
+function init(){
+ rebuildDivisionFilter();
+ document.getElementById('divisionFilter').addEventListener('change',e=>{state.division=e.target.value;render()});
+ document.getElementById('statusFilter').addEventListener('change',e=>{state.findingStatus=e.target.value;render()});
+ document.getElementById('actionFilter').addEventListener('change',e=>{state.actionStatus=e.target.value;render()});
+ document.getElementById('excelFileInput').addEventListener('change',handleExcelUpload);
+ render();
+}
+function filteredFindings(){return DATA.findings.filter(f=>matchesDivision(f.division,state.division)&&(state.findingStatus==='ALL'||f.status===state.findingStatus))}
+function filteredActions(){
+ let arr=DATA.actions.filter(a=>matchesDivision(a.division,state.division)&&(state.actionStatus==='ALL'||a.status===state.actionStatus));
+ if(state.findingStatus!=='ALL'){const ok=new Set(filteredFindings().map(f=>f.no));arr=arr.filter(a=>ok.has(a.findingNo))}
+ return arr;
+}
+function pct(n,d){return d?Math.round(n/d*100):0}
+function countDivisions(findings){
+ const divisions=new Set();findings.forEach(f=>divisionTokens(f.division).forEach(d=>divisions.add(d)));return divisions.size;
+}
+function statusPill(s){let cls='pending';let label=s||'—';if(/complete|closed|close/i.test(s)){cls='completed';label='Closed'}else if(/ongoing|open|progress/i.test(s)){cls='ongoing';label='Open'}else if(/overdue/i.test(s)){cls='overdue';label='Overdue'}return `<span class="pill ${cls}">${esc(label)}</span>`}
+function render(){
+ const F=filteredFindings(),A=filteredActions();
+ const divisionCount=countDivisions(F);
+ const done=F.filter(f=>f.status==='Completed').length,ongoing=F.filter(f=>f.status==='Ongoing').length,closure=pct(done,F.length);
+ animateMetric('kDivisions',divisionCount);animateMetric('kTotal',F.length);animateMetric('kOpen',ongoing);animateMetric('kCompleted',done);animateMetric('kClosure',closure,'%');
+ document.getElementById('kDivisionsSub').textContent=state.division==='ALL'?(divisionCount===1?'Division in current scope':'Divisions in current scope'):(divisionCount?'Selected division':'No division in scope');
+ document.getElementById('kTotalSub').textContent=state.division==='ALL'?'Across all divisions':state.division+' scope';
+ document.getElementById('scopeNote').textContent=state.division==='ALL'?'Showing all divisions':`Showing ${state.division}${DATA.findings.some(f=>normalizeDivision(f.division).includes(' / ')&&matchesDivision(f.division,state.division))?' + joint findings':''}`;
+ document.getElementById('findingBadge').textContent=F.length+' finding'+(F.length===1?'':'s');document.getElementById('actionBadge').textContent=A.length+' action plan'+(A.length===1?'':'s');
+ animateFindingStatus(done,F.length,closure);
+ document.getElementById('findingLegend').innerHTML=`<div class="legendRow"><span class="dot" style="background:#2f7d57"></span><span>Closed</span><strong>${done}</strong></div><div class="legendRow"><span class="dot" style="background:#DCE7F0"></span><span>Open</span><strong>${ongoing}</strong></div>`;
+ renderDivisionBars(F);renderActionStack(A);renderAgeing(A);renderPIC(A);renderTable();
+}
+
+function renderTable(){
+  const host=document.getElementById('tableHost');
+  if(state.tab==='findings'){
+    const rows=filteredFindings().slice().sort((a,b)=>a.no-b.no);
+    if(!rows.length){host.innerHTML='<div class="empty">No findings match the selected filters.</div>';return}
+    host.innerHTML=`<div class="tableWrap"><table><thead><tr><th>No.</th><th>Division</th><th>Finding / Issue</th><th>Status</th><th>Primary PIC</th><th>Due / Timing</th><th>Management Flag</th></tr></thead><tbody>${rows.map(f=>`<tr class="clickable" onclick="openFinding(${f.no})"><td class="num">${f.no}</td><td>${esc(f.division)}${f.division.includes('/')?'<span class="joint">JOINT</span>':''}</td><td>${esc(f.summary)}</td><td>${statusPill(f.status)}</td><td>${esc(f.pic||'—')}</td><td>${esc(f.due||'—')}</td><td>${esc(f.managementFlag||'—')}</td></tr>`).join('')}</tbody></table></div>`;
+  }else{
+    const rows=filteredActions();
+    if(!rows.length){host.innerHTML='<div class="empty">No action plans match the selected filters.</div>';return}
+    host.innerHTML=`<div class="tableWrap"><table><thead><tr><th>Action ID</th><th>Finding</th><th>Division</th><th>Action Plan</th><th>PIC</th><th>Due</th><th>Status</th><th>Due Health</th></tr></thead><tbody>${rows.map(a=>`<tr><td class="num">${esc(a.id)}</td><td>${a.findingNo??'—'}</td><td>${esc(a.division)}${a.division.includes('/')?'<span class="joint">JOINT</span>':''}</td><td>${esc(a.action||'No action text recorded')}</td><td>${esc(a.pic||'—')}</td><td>${esc(a.due||'—')}</td><td>${statusPill(a.status)}</td><td>${statusPill(a.health||'—')}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+}
+function setTab(t){
+  state.tab=t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  renderTable();
+}
+
+function renderDivisionBars(F){
+ let counts=[];
+ if(state.division==='ALL'){
+   counts=getDivisionCategories().map(d=>[d,F.filter(f=>normalizeDivision(f.division)===d).length]);
+ }else{
+   const exact=F.filter(f=>normalizeDivision(f.division)===state.division).length;if(exact)counts.push([state.division,exact]);
+   const joint=F.filter(f=>normalizeDivision(f.division)!==state.division&&matchesDivision(f.division,state.division));
+   const jointGroups=[...new Set(joint.map(f=>normalizeDivision(f.division)))];jointGroups.forEach(d=>counts.push([d,joint.filter(f=>normalizeDivision(f.division)===d).length]));
+ }
+ counts=counts.filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));const max=Math.max(1,...counts.map(x=>x[1]));
+ document.getElementById('divisionBars').innerHTML=counts.map(([d,n])=>`<div class="barRow divisionClickable" title="Click for findings" onclick="openDivision('${escAttr(d)}')"><div class="barLabel">${esc(d)}</div><div class="track"><div class="fill" style="width:${n/max*100}%"></div></div><div class="barVal">${n}</div></div>`).join('')||'<div class="empty">No findings in scope</div>';
+}
+function renderActionStack(A){
+ const completed=A.filter(a=>a.status==='Completed').length,ongoing=A.filter(a=>a.status==='Ongoing').length,overdue=A.filter(a=>/overdue/i.test(a.health)).length;
+ const actionClosure=pct(completed,A.length);
+ document.getElementById('actionStack').innerHTML=`
+ <div class="actionSummary">
+   <div class="actionMini"><span>Total Action Plans</span><b class="actionAnim" data-target="${A.length}" data-suffix=""></b></div>
+   <div class="actionMini"><span>Action Plan Closure Rate</span><b class="actionAnim" data-target="${actionClosure}" data-suffix="%"></b></div>
+ </div>
+ <div class="statusTile interactiveStatus" onclick="openActionStatus('Completed')"><div class="meta"><div class="statusIcon good">✓</div><div><strong>Closed</strong><small>Action plans closed</small></div></div><b class="actionAnim" data-target="${completed}" data-suffix=""></b></div>
+ <div class="statusTile interactiveStatus" onclick="openActionStatus('Ongoing')"><div class="meta"><div class="statusIcon wait">↻</div><div><strong>Open</strong><small>Still in progress</small></div></div><b class="actionAnim" data-target="${ongoing}" data-suffix=""></b></div>
+ <div class="statusTile interactiveStatus" onclick="openActionOverdue()"><div class="meta"><div class="statusIcon bad">!</div><div><strong>Overdue</strong><small>Based on Due Health</small></div></div><b class="actionAnim" data-target="${overdue}" data-suffix=""></b></div>`;
+ animateActionStatus();
+}
+function parseDateAny(v){
+ const s=cleanText(v); if(!s)return null;
+ if(/^\d{4}-\d{2}-\d{2}/.test(s)){const d=new Date(s);return isNaN(d)?null:d}
+ const m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/); if(m){const d=new Date(Number(m[3]),Number(m[2])-1,Number(m[1]));return isNaN(d)?null:d}
+ const d=new Date(s); return isNaN(d)?null:d
+}
+function isOverdue(a){const d=parseDateAny(a.due);return !!d&&d<new Date(new Date().setHours(0,0,0,0))}
+function daysToDue(a){const d=parseDateAny(a.due);if(!d)return null;return Math.ceil((d-new Date(new Date().setHours(0,0,0,0)))/86400000)}
+function ageBucket(a){
+ const n=daysToDue(a);
+ if(n===null)return 'No due date';
+ if(n<0)return 'Overdue';
+ if(n<=30)return '0–30 days';
+ if(n<=60)return '31–60 days';
+ if(n<=90)return '61–90 days';
+ return '>90 days';
+}
+function renderAgeing(A){
+ const open=A.filter(a=>a.status!=='Completed'), labels=['Overdue','0–30 days','31–60 days','61–90 days','>90 days'];
+ const groups=labels.map(l=>[l,open.filter(a=>ageBucket(a)===l).length]);
+ const max=Math.max(1,...groups.map(x=>x[1]));
+ document.getElementById('ageingChart').innerHTML=groups.map(([l,n])=>`<div class="ageRow clickableMetric" onclick="openAgeing('${escAttr(l)}')" title="Click to view action plans"><span class="ageLabel">${l}</span><div class="ageFill"><i style="width:${n/max*100}%"></i></div><span class="ageVal">${n}</span></div>`).join('');
+}
+function renderPIC(A){
+ const open=A.filter(a=>a.status!=='Completed'),map={};
+ open.forEach(a=>{const p=a.pic||'Unassigned';map[p]=(map[p]||0)+1});
+ const rows=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,8),max=Math.max(1,...rows.map(x=>x[1]));
+ document.getElementById('picChart').innerHTML=rows.length?rows.map(([p,n])=>`<div class="picRow clickableMetric" onclick="openPIC('${escAttr(p)}')" title="Click to view open action plans"><span class="picLabel" title="${escAttr(p)}">${esc(p)}</span><div class="ageFill"><i style="width:${n/max*100}%"></i></div><span class="ageVal">${n}</span></div>`).join(''):'<div class="empty">No open action plans</div>';
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])).replace(/\n/g,'<br>')}
+function escAttr(s){return esc(s).replace(/<br>/g,' ')}
+function actionTable(rows){
+ if(!rows.length)return '<div class="empty">No action plans found for this selection.</div>';
+ return `<div class="tableWrap"><table style="min-width:760px"><thead><tr><th>Action ID</th><th>Finding</th><th>Division</th><th>Action Plan</th><th>PIC</th><th>Due</th><th>Status</th></tr></thead><tbody>${rows.map(a=>`<tr><td class="num">${esc(a.id)}</td><td>${a.findingNo??'—'}</td><td>${esc(a.division||'—')}</td><td>${esc(a.action||'No action text recorded')}</td><td>${esc(a.pic||'—')}</td><td>${esc(a.due||'—')}</td><td>${statusPill(a.status)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function openAgeing(bucket){
+ const rows=filteredActions().filter(a=>a.status!=='Completed'&&ageBucket(a)===bucket);
+ document.getElementById('modalEyebrow').textContent='Action Plan Ageing';
+ document.getElementById('modalTitle').textContent=bucket;
+ document.getElementById('modalBody').innerHTML=`<div class="detailGrid"><div class="detail"><label>Open Action Plans</label><div><strong style="font-size:20px;color:var(--navy)">${rows.length}</strong></div></div><div class="detail"><label>Ageing Band</label><div>${esc(bucket)}</div></div><div class="detail full"><label>Action Plans</label><div>${actionTable(rows)}</div></div></div>`;
+ document.getElementById('modal').classList.add('show');
+}
+function openPIC(pic){
+ const rows=filteredActions().filter(a=>a.status!=='Completed'&&(a.pic||'Unassigned')===pic);
+ document.getElementById('modalEyebrow').textContent='Open Action Plans by PIC';
+ document.getElementById('modalTitle').textContent=pic;
+ document.getElementById('modalBody').innerHTML=`<div class="detailGrid"><div class="detail"><label>PIC</label><div>${esc(pic)}</div></div><div class="detail"><label>Open Action Plans</label><div><strong style="font-size:20px;color:var(--navy)">${rows.length}</strong></div></div><div class="detail full"><label>Open Action Plans</label><div>${actionTable(rows)}</div></div></div>`;
+ document.getElementById('modal').classList.add('show');
+}
+function openFindingStatus(){
+ const F=filteredFindings(),closed=F.filter(f=>f.status==='Completed'),open=F.filter(f=>f.status==='Ongoing');
+ const rows=[...open,...closed].sort((a,b)=>a.no-b.no);
+ document.getElementById('modalEyebrow').textContent='Finding Status';
+ document.getElementById('modalTitle').textContent='Finding Status Overview';
+ const table=`<div class="tableWrap"><table style="min-width:760px"><thead><tr><th>No.</th><th>Division</th><th>Finding / Issue</th><th>Status</th><th>Primary PIC</th><th>Due / Timing</th></tr></thead><tbody>${rows.map(f=>`<tr class="clickable" onclick="openFinding(${f.no})"><td class="num">${f.no}</td><td>${esc(f.division)}</td><td>${esc(f.summary)}</td><td>${statusPill(f.status)}</td><td>${esc(f.pic||'—')}</td><td>${esc(f.due||'—')}</td></tr>`).join('')}</tbody></table></div>`;
+ document.getElementById('modalBody').innerHTML=`<div class="detailGrid"><div class="detail"><label>Total Findings</label><div><strong style="font-size:20px;color:var(--navy)">${F.length}</strong></div></div><div class="detail"><label>Closure Rate</label><div><strong style="font-size:20px;color:var(--navy)">${pct(closed.length,F.length)}%</strong></div></div><div class="detail"><label>Open</label><div><strong style="font-size:20px;color:var(--red)">${open.length}</strong></div></div><div class="detail"><label>Closed</label><div><strong style="font-size:20px;color:#2f7d57">${closed.length}</strong></div></div><div class="detail full"><label>Findings in Current Scope</label><div>${table}</div></div></div>`;
+ document.getElementById('modal').classList.add('show');
+}
+function openFinding(no){const f=DATA.findings.find(x=>x.no===no);if(!f)return;const aa=DATA.actions.filter(a=>a.findingNo===no);document.getElementById('modalTitle').textContent=`Finding ${f.no} — ${f.summary}`;document.getElementById('modalBody').innerHTML=`<div class="detailGrid"><div class="detail"><label>Division</label><div>${esc(f.division)}</div></div><div class="detail"><label>Status</label><div>${statusPill(f.status)}</div></div><div class="detail"><label>Primary PIC</label><div>${esc(f.pic||'—')}</div></div><div class="detail"><label>Due / Timing</label><div>${esc(f.due||'—')}</div></div><div class="detail"><label>Management Flag</label><div>${esc(f.managementFlag||'—')}</div></div><div class="detail full"><label>Linked Action Plan</label><div class="actionList">${aa.length?aa.map(a=>`<div class="actionItem"><strong>${esc(a.id)} · ${a.status==='Completed'?'Closed':a.status==='Ongoing'?'Open':esc(a.status)}</strong><br>${esc(a.action||'No action text recorded')}<div class="actionMeta">PIC: ${esc(a.pic||'—')} · Due: ${esc(a.due||'—')} · Health: ${esc(a.health||'—')}</div></div>`).join(''):'No linked action plan found.'}</div></div></div>`;document.getElementById('modal').classList.add('show')}
+
+function openDivision(division){
+  const F=filteredFindings().filter(f=>normalizeDivision(f.division)===division);
+  const rows=F.map(f=>`<tr onclick="openFinding(${f.no})" style="cursor:pointer"><td>${f.no}</td><td>${esc(f.summary)}</td><td>${statusPill(f.status)}</td><td>${esc(f.pic||'—')}</td><td>${esc(f.due||'—')}</td></tr>`).join('');
+  document.getElementById('modalTitle').textContent=`${division} — ${F.length} finding${F.length===1?'':'s'}`;
+  document.getElementById('modalBody').innerHTML=`<div class="detailGrid">
+    <div class="detail"><label>Division</label><div>${esc(division)}</div></div>
+    <div class="detail"><label>Findings</label><div><strong style="font-size:20px;color:var(--navy)">${F.length}</strong></div></div>
+    <div class="detail full"><label>Findings in ${esc(division)}</label><div class="tableWrap"><table><thead><tr><th>No.</th><th>Finding</th><th>Status</th><th>Primary PIC</th><th>Due / Timing</th></tr></thead><tbody>${rows||'<tr><td colspan="5">No findings in current scope.</td></tr>'}</tbody></table></div></div>
+  </div>`;
+  document.getElementById('modal').classList.add('show');
+}
+
+
+function actionPopupRows(A){
+  return A.map(a=>`<tr onclick="openFinding(${a.findingNo})" style="cursor:pointer">
+    <td>${esc(a.id||'—')}</td><td>${a.findingNo}</td><td>${esc(a.division||'—')}</td>
+    <td>${esc(a.pic||'—')}</td><td>${esc(a.due||'—')}</td>
+    <td>${a.status==='Completed'?'<span class="pill closed">Closed</span>':'<span class="pill ongoing">Open</span>'}</td>
+    <td>${esc(a.health||'—')}</td>
+  </tr>`).join('');
+}
+function openActionStatus(status){
+  const A=filteredActions().filter(a=>a.status===status);
+  const label=status==='Completed'?'Closed':'Open';
+  document.getElementById('modalTitle').textContent=`Action Plans — ${label} (${A.length})`;
+  document.getElementById('modalBody').innerHTML=`<div class="detailGrid">
+    <div class="detail"><label>Status</label><div>${label}</div></div>
+    <div class="detail"><label>Total</label><div><strong style="font-size:20px;color:var(--navy)">${A.length}</strong></div></div>
+    <div class="detail full"><label>Action Plans</label><div class="tableWrap"><table><thead><tr><th>Action Plan</th><th>Finding No.</th><th>Division</th><th>PIC</th><th>Due</th><th>Status</th><th>Due Health</th></tr></thead><tbody>${actionPopupRows(A)||'<tr><td colspan="7">No action plans in current scope.</td></tr>'}</tbody></table></div></div>
+  </div>`;
+  document.getElementById('modal').classList.add('show');
+}
+function openActionOverdue(){
+  const A=filteredActions().filter(a=>/overdue/i.test(a.health||''));
+  document.getElementById('modalTitle').textContent=`Action Plans — Overdue (${A.length})`;
+  document.getElementById('modalBody').innerHTML=`<div class="detailGrid">
+    <div class="detail"><label>Status</label><div>Overdue</div></div>
+    <div class="detail"><label>Total</label><div><strong style="font-size:20px;color:var(--red)">${A.length}</strong></div></div>
+    <div class="detail full"><label>Overdue Action Plans</label><div class="tableWrap"><table><thead><tr><th>Action Plan</th><th>Finding No.</th><th>Division</th><th>PIC</th><th>Due</th><th>Status</th><th>Due Health</th></tr></thead><tbody>${actionPopupRows(A)||'<tr><td colspan="7">No overdue action plans in current scope.</td></tr>'}</tbody></table></div></div>
+  </div>`;
+  document.getElementById('modal').classList.add('show');
+}
+
+
+function animateMetric(id,target,suffix='',duration=850){
+  const el=document.getElementById(id); if(!el)return;
+  const t0=performance.now();
+  el.classList.add('countAnimate');
+  function tick(now){
+    const p=Math.min(1,(now-t0)/duration);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*eased)+suffix;
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function animateFindingStatus(done,total,closure){
+  const donut=document.getElementById('donut'), pctEl=document.getElementById('donutPct');
+  if(!donut||!pctEl)return;
+  donut.style.setProperty('--angle','0deg');
+  const targetAngle=(closure||0)*3.6, t0=performance.now();
+  function tick(now){
+    const p=Math.min(1,(now-t0)/1100);
+    const eased=1-Math.pow(1-p,3);
+    donut.style.setProperty('--angle',(targetAngle*eased)+'deg');
+    pctEl.textContent=Math.round((closure||0)*eased)+'%';
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+
+function animateActionStatus(){
+ document.querySelectorAll('#actionStack .actionAnim').forEach(el=>{
+   const target=Number(el.dataset.target||0),suffix=el.dataset.suffix||'';
+   animateElementValue(el,target,suffix,850);
+ });
+}
+function animateElementValue(el,target,suffix='',duration=850){
+ const t0=performance.now();
+ el.textContent='0'+suffix;
+ function tick(now){
+   const p=Math.min(1,(now-t0)/duration);
+   const eased=1-Math.pow(1-p,3);
+   el.textContent=Math.round(target*eased)+suffix;
+   if(p<1)requestAnimationFrame(tick);
+ }
+ requestAnimationFrame(tick);
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function resetFilters(){state={division:'ALL',findingStatus:'ALL',actionStatus:'ALL',tab:state.tab};document.getElementById('divisionFilter').value='ALL';document.getElementById('statusFilter').value='ALL';document.getElementById('actionFilter').value='ALL';render()}
+
+
+// ---------- Excel export (filtered dashboard data) ----------
+function xmlEsc(v){
+  return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+function colLetter(n){
+  let s='';
+  while(n>0){let r=(n-1)%26;s=String.fromCharCode(65+r)+s;n=Math.floor((n-1)/26)}
+  return s;
+}
+function xlsxSheetXml(rows){
+  const body=rows.map((row,ri)=>{
+    const cells=row.map((v,ci)=>{
+      const ref=colLetter(ci+1)+(ri+1);
+      return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;
+    }).join('');
+    return `<row r="${ri+1}">${cells}</row>`;
+  }).join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${body}</sheetData></worksheet>`;
+}
+function crc32(bytes){
+  let table=crc32.table;
+  if(!table){
+    table=new Uint32Array(256);
+    for(let n=0;n<256;n++){
+      let c=n;
+      for(let k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);
+      table[n]=c>>>0;
+    }
+    crc32.table=table;
+  }
+  let c=0xFFFFFFFF;
+  for(let i=0;i<bytes.length;i++) c=table[(c^bytes[i])&255]^(c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+function u16(n){return new Uint8Array([n&255,(n>>>8)&255])}
+function u32(n){return new Uint8Array([n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255])}
+function concatBytes(parts){
+  const len=parts.reduce((a,b)=>a+b.length,0), out=new Uint8Array(len); let p=0;
+  parts.forEach(b=>{out.set(b,p);p+=b.length}); return out;
+}
+function zipStore(files){
+  const enc=new TextEncoder(), locals=[], centrals=[]; let offset=0;
+  files.forEach(([name,text])=>{
+    const nb=enc.encode(name), data=enc.encode(text), crc=crc32(data);
+    const local=concatBytes([
+      new Uint8Array([0x50,0x4b,0x03,0x04]),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(nb.length),u16(0),nb,data
+    ]);
+    locals.push(local);
+    const central=concatBytes([
+      new Uint8Array([0x50,0x4b,0x01,0x02]),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),
+      u32(crc),u32(data.length),u32(data.length),u16(nb.length),u16(0),u16(0),u16(0),u16(0),
+      u32(0),u32(offset),nb
+    ]);
+    centrals.push(central); offset+=local.length;
+  });
+  const centralBytes=concatBytes(centrals);
+  const end=concatBytes([
+    new Uint8Array([0x50,0x4b,0x05,0x06]),u16(0),u16(0),u16(files.length),u16(files.length),
+    u32(centralBytes.length),u32(offset),u16(0)
+  ]);
+  return concatBytes([...locals,centralBytes,end]);
+}
+function downloadXlsx(filename,sheetName,rows){
+  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>`;
+  const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
+  const wb=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${xmlEsc(sheetName)}" sheetId="1" r:id="rId1"/></sheets></workbook>`;
+  const wbRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>`;
+  const zip=zipStore([
+    ["[Content_Types].xml",contentTypes],
+    ["_rels/.rels",rels],
+    ["xl/workbook.xml",wb],
+    ["xl/_rels/workbook.xml.rels",wbRels],
+    ["xl/worksheets/sheet1.xml",xlsxSheetXml(rows)]
+  ]);
+  const blob=new Blob([zip],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+}
+function exportFindingsXlsx(){
+  const F=filteredFindings();
+  const rows=[
+    ["Finding No.","Division","Finding","Status","Primary PIC","Management Flag","Due / Timing"],
+    ...F.map(f=>[f.no,f.division,f.summary,f.status,f.pic,f.managementFlag,f.due])
+  ];
+  downloadXlsx(`Audit_Findings_${new Date().toISOString().slice(0,10)}.xlsx`,"Findings",rows);
+}
+function exportActionsXlsx(){
+  const A=filteredActions();
+  const rows=[
+    ["Action Plan","Finding No.","Division","Action Plan","PIC","Due","Status","Due Health"],
+    ...A.map(a=>[a.id,a.findingNo,a.division,a.action,a.pic,a.due,a.status,a.health])
+  ];
+  downloadXlsx(`Audit_Action_Plans_${new Date().toISOString().slice(0,10)}.xlsx`,"Action Plans",rows);
+}
+
+// ---------- Portable XLSX reader (no server / no external library) ----------
+function readU16(v,o){return v.getUint16(o,true)}function readU32(v,o){return v.getUint32(o,true)}
+async function unzipXlsx(buffer){
+ const bytes=new Uint8Array(buffer),view=new DataView(buffer);let eocd=-1;
+ for(let i=Math.max(0,bytes.length-65557);i<=bytes.length-22;i++){if(readU32(view,i)===0x06054b50)eocd=i}
+ if(eocd<0)throw new Error('This does not appear to be a valid XLSX file.');
+ const total=readU16(view,eocd+10),centralOffset=readU32(view,eocd+16),dec=new TextDecoder('utf-8');
+ let p=centralOffset;const files={};
+ for(let i=0;i<total;i++){
+   if(readU32(view,p)!==0x02014b50)throw new Error('Invalid XLSX ZIP directory.');
+   const method=readU16(view,p+10),compSize=readU32(view,p+20),fnameLen=readU16(view,p+28),extraLen=readU16(view,p+30),commentLen=readU16(view,p+32),localOffset=readU32(view,p+42);
+   const name=dec.decode(bytes.slice(p+46,p+46+fnameLen));
+   if(readU32(view,localOffset)!==0x04034b50)throw new Error('Invalid XLSX ZIP entry.');
+   const lfName=readU16(view,localOffset+26),lfExtra=readU16(view,localOffset+28),start=localOffset+30+lfName+lfExtra;let raw=bytes.slice(start,start+compSize);
+   if(!name.endsWith('/')){
+     if(method===8){const ds=new DecompressionStream('deflate-raw');raw=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(ds)).arrayBuffer())}
+     else if(method!==0)throw new Error('Unsupported XLSX compression method: '+method);
+     files[name]=raw;
+   }
+   p+=46+fnameLen+extraLen+commentLen;
+ }
+ return files;
+}
+function xmlDoc(bytes){const text=new TextDecoder('utf-8').decode(bytes);const doc=new DOMParser().parseFromString(text,'application/xml');if(doc.querySelector('parsererror'))throw new Error('Could not parse workbook XML.');return doc}
+function sharedStringsFrom(files){
+ const b=files['xl/sharedStrings.xml'];if(!b)return[];const doc=xmlDoc(b);return [...doc.getElementsByTagName('si')].map(si=>[...si.getElementsByTagName('t')].map(t=>t.textContent||'').join(''));
+}
+function workbookSheetMap(files){
+ const wb=xmlDoc(files['xl/workbook.xml']),rels=xmlDoc(files['xl/_rels/workbook.xml.rels']);const relMap={};
+ [...rels.getElementsByTagName('Relationship')].forEach(r=>relMap[r.getAttribute('Id')]=r.getAttribute('Target'));
+ const out={};[...wb.getElementsByTagName('sheet')].forEach(s=>{const n=s.getAttribute('name'),rid=s.getAttribute('r:id');let target=relMap[rid]||'';target=target.replace(/^\//,'').replace(/^xl\//,'');out[n]='xl/'+target});return out;
+}
+function colIndex(ref){const m=String(ref).match(/^([A-Z]+)/i);if(!m)return 0;let n=0;for(const ch of m[1].toUpperCase())n=n*26+(ch.charCodeAt(0)-64);return n-1}
+function parseSheetRows(bytes,shared){
+ const doc=xmlDoc(bytes),rows=[];
+ [...doc.getElementsByTagName('row')].forEach(r=>{const arr=[];[...r.getElementsByTagName('c')].forEach(c=>{const idx=colIndex(c.getAttribute('r')||'A1'),t=c.getAttribute('t')||'',v=c.getElementsByTagName('v')[0],is=c.getElementsByTagName('is')[0];let val='';if(t==='s')val=shared[Number(v?.textContent||0)]??'';else if(t==='inlineStr')val=is?[...is.getElementsByTagName('t')].map(x=>x.textContent||'').join(''):'';else if(t==='b')val=(v?.textContent==='1');else if(t==='str')val=v?.textContent||'';else if(v){const raw=v.textContent||'';val=raw!==''&&!isNaN(raw)?Number(raw):raw}arr[idx]=val});rows.push(arr)});return rows;
+}
+function excelDate(v){
+ if(typeof v!=='number'||!isFinite(v))return cleanText(v);const ms=Date.UTC(1899,11,30)+Math.round(v*86400000),d=new Date(ms);if(isNaN(d))return String(v);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).replace(/ /g,' ');
+}
+function rowsToObjects(rows){if(!rows.length)return[];const headers=rows[0].map(x=>cleanText(x));return rows.slice(1).filter(r=>r.some(v=>v!==undefined&&v!==null&&cleanText(v)!=='')).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]??''])))}
+function findKey(obj,wanted){const keys=Object.keys(obj),norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');const w=norm(wanted);return keys.find(k=>norm(k)===w)}
+function val(obj,name){const k=findKey(obj,name);return k?obj[k]:''}
+function validateHeaders(objs,required,sheetName){if(!objs.length)throw new Error(`${sheetName} sheet has no data rows.`);const sample=objs[0],missing=required.filter(h=>!findKey(sample,h));if(missing.length)throw new Error(`${sheetName} is missing column(s): ${missing.join(', ')}`)}
+async function parseAuditWorkbook(file){
+ const files=await unzipXlsx(await file.arrayBuffer()),shared=sharedStringsFrom(files),map=workbookSheetMap(files);
+ const findName=Object.keys(map).find(n=>n.trim().toUpperCase()==='FINDINGS'),actName=Object.keys(map).find(n=>n.trim().toUpperCase()==='ACTION PLANS');
+ if(!findName||!actName)throw new Error('Workbook must contain sheets named FINDINGS and ACTION PLANS.');
+ const fr=rowsToObjects(parseSheetRows(files[map[findName]],shared)),ar=rowsToObjects(parseSheetRows(files[map[actName]],shared));
+ validateHeaders(fr,['Finding No.','Division','Finding Summary','Status','Primary PIC','Management Flag','Due / Timing'],'FINDINGS');
+ validateHeaders(ar,['Action ID','Finding No.','Division','Action Plan','PIC','Due Date','Action Status','Due Health'],'ACTION PLANS');
+ const findings=fr.map(r=>({
+   no:Number(val(r,'Finding No.')),division:normalizeDivision(val(r,'Division')),summary:cleanText(val(r,'Finding Summary')),status:normalizeStatus(val(r,'Status')),pic:cleanText(val(r,'Primary PIC')),managementFlag:cleanText(val(r,'Management Flag')),due:typeof val(r,'Due / Timing')==='number'?excelDate(val(r,'Due / Timing')):cleanText(val(r,'Due / Timing'))
+ })).filter(x=>Number.isFinite(x.no)&&x.division);
+ const actions=ar.map(r=>({
+   id:cleanText(val(r,'Action ID')),findingNo:Number(val(r,'Finding No.')),division:normalizeDivision(val(r,'Division')),action:cleanText(val(r,'Action Plan')),pic:cleanText(val(r,'PIC')),due:typeof val(r,'Due Date')==='number'?excelDate(val(r,'Due Date')):cleanText(val(r,'Due Date')),status:normalizeStatus(val(r,'Action Status')),health:cleanText(val(r,'Due Health'))
+ })).filter(x=>x.id&&Number.isFinite(x.findingNo));
+ if(!findings.length)throw new Error('No valid findings were found in the FINDINGS sheet.');
+ return {findings,actions};
+}
+async function handleExcelUpload(e){
+ const file=e.target.files?.[0];if(!file)return;const msg=document.getElementById('uploadMsg');msg.className='uploadMsg';msg.textContent='Reading workbook…';
+ try{
+   const parsed=await parseAuditWorkbook(file);DATA=parsed;state={division:'ALL',findingStatus:'ALL',actionStatus:'ALL',tab:state.tab};rebuildDivisionFilter();document.getElementById('statusFilter').value='ALL';document.getElementById('actionFilter').value='ALL';document.getElementById('sourceFile').textContent=file.name;setLastUpdated(new Date());msg.textContent=`· ${DATA.findings.length} findings · ${DATA.actions.length} action plans loaded`;render();
+ }catch(err){console.error(err);msg.className='uploadMsg error';msg.textContent='· Upload failed';alert('Could not load the Excel file.\n\n'+err.message+'\n\nPlease keep the sheet names and column headers in the same format as the template.')}finally{e.target.value=''}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});setLastUpdated(new Date());init();
+</script>
+</body></html>
