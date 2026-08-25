@@ -79,11 +79,16 @@ section{padding:62px 0}
   padding:18px;
   box-shadow:0 14px 40px rgba(23,32,51,.07);
   display:grid;
-  grid-template-columns:1.12fr .88fr;
+  grid-template-columns:1.08fr .92fr;
   gap:28px;
   margin-bottom:22px;
   overflow:hidden;
 }
+.featuredProject.reverse{
+  grid-template-columns:.92fr 1.08fr;
+}
+.featuredProject.reverse .projectPreview{order:2}
+.featuredProject.reverse .featuredInfo{order:1}
 .projectPreview{
   min-width:0;
   border:1px solid #dce4ee;
@@ -133,6 +138,9 @@ section{padding:62px 0}
   background:linear-gradient(135deg,#123b63,#1f5f95);
   color:#fff;
 }
+.previewFallback.quiz{
+  background:linear-gradient(135deg,#0f2f4f,#2f6feb);
+}
 .previewFallback .mockKpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
 .previewFallback .mockKpis div{background:#fff;color:#172033;border-radius:10px;padding:12px}
 .previewFallback b{display:block;font-size:20px}
@@ -167,7 +175,7 @@ section{padding:62px 0}
 .demoNote{font-size:11px;color:#7b8491;margin-top:16px}
 .otherWorkTitle{
   font-size:13px;text-transform:uppercase;letter-spacing:.1em;
-  color:#7a8491;font-weight:800;margin:30px 0 14px
+  color:#7a8491;font-weight:800;margin:32px 0 14px
 }
 
 .skills{display:flex;flex-wrap:wrap;gap:10px}
@@ -184,7 +192,8 @@ section{padding:62px 0}
 footer{padding:34px 0 50px;color:var(--muted);font-size:13px}
 @media (max-width:800px){
   .hero{grid-template-columns:1fr}
-  .featuredProject{grid-template-columns:1fr;padding:12px}
+  .featuredProject,.featuredProject.reverse{grid-template-columns:1fr;padding:12px}
+  .featuredProject.reverse .projectPreview,.featuredProject.reverse .featuredInfo{order:initial}
   .projectPreview{min-height:250px}
   .liveFrame{display:none}
   .previewFallback{display:block}
@@ -280,19 +289,60 @@ footer{padding:34px 0 50px;color:var(--muted);font-size:13px}
       </div>
     </article>
 
+    <article class="featuredProject reverse">
+      <div class="projectPreview" aria-label="Live preview of the Emergency Communication Awareness Dashboard">
+        <div class="browserBar">
+          <span class="browserDot"></span><span class="browserDot"></span><span class="browserDot"></span>
+          <span class="browserUrl"></span>
+        </div>
+        <iframe class="liveFrame" src="projects/quiz-dashboard/" title="Emergency Communication Awareness Dashboard live preview" loading="lazy"></iframe>
+        <div class="previewFallback quiz">
+          <small>PORTFOLIO DEMO</small>
+          <h3 style="margin:8px 0 0">Emergency Communication Awareness Dashboard</h3>
+          <div class="mockKpis">
+            <div><small>Responses</small><b>18</b></div>
+            <div><small>Accuracy</small><b>87%</b></div>
+            <div><small>Perfect</small><b>3</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featuredInfo">
+        <span class="featuredLabel"><i class="liveDot"></i> Featured · Live Demo</span>
+        <h3>Training & Quiz Performance Dashboard</h3>
+        <p>
+          An interactive learning analytics dashboard that compares before-and-after assessment
+          performance and highlights employee and question-level understanding gaps.
+        </p>
+
+        <div class="projectPoints">
+          <div class="projectPoint"><span class="tick">✓</span><span>Before vs After employee score comparison</span></div>
+          <div class="projectPoint"><span class="tick">✓</span><span>Top performer ranking using score and completion time</span></div>
+          <div class="projectPoint"><span class="tick">✓</span><span>Question-level analysis, understanding bands and respondent drill-down</span></div>
+        </div>
+
+        <div class="projectActions">
+          <a class="btn primary" href="projects/quiz-dashboard/" target="_blank" rel="noopener">View Live Demo ↗</a>
+          <a class="textLink" href="projects/quiz-dashboard/" target="_blank" rel="noopener">Open full dashboard</a>
+        </div>
+        <div class="demoNote">Portfolio demonstration using a fictional company and dummy participant data.</div>
+        <div class="meta">Excel · HTML · JavaScript · Learning Analytics</div>
+      </div>
+    </article>
+
     <div class="otherWorkTitle">More selected work</div>
     <div class="grid">
       <article class="card">
-        <span class="tag">Analytics</span>
-        <h3>Training & Quiz Performance Dashboard</h3>
-        <p>Turns assessment data into score distributions, question-level insights and participant ranking.</p>
+        <span class="tag">Reporting</span>
+        <h3>Operational KPI Dashboard</h3>
+        <p>Transforms recurring operational data into a concise management view for trend and performance monitoring.</p>
         <div class="case">
           <b>Problem</b>
-          <p>Raw quiz results did not clearly show areas of weak understanding.</p>
+          <p>Recurring performance data was difficult to review consistently across reporting periods.</p>
           <b>Solution</b>
-          <p>Built an interactive dashboard highlighting performance gaps and top performers.</p>
+          <p>Structured the data into clear KPIs, filters and management-level trend views.</p>
         </div>
-        <div class="meta">Excel · Data Visualization · HTML</div>
+        <div class="meta">Excel · Data Visualization · Reporting</div>
       </article>
 
       <article class="card">
